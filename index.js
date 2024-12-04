@@ -24,6 +24,7 @@ async function run() {
   try {
     // const gymShedule = client.db('gym-shedule').collection('shedule');
     const userCollection = client.db('gaming-user').collection('users');
+    const reviewCollection = client.db('gaming-user').collection('reviews');
 
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
@@ -33,6 +34,24 @@ async function run() {
         const result = await userCollection.insertOne(newUser);
         res.send(result);
     })
+
+    // review related api
+
+    app.post('/reviews', async(req,res)=>{
+        const newrevidw = req.body;
+        const result = await reviewCollection.insertOne(newrevidw);
+        res.send(result);
+    })
+
+    app.get('/reviews', async (req, res) => {
+      const cursor = reviewCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    })
+
+
+
+   
 
 
     // Send a ping to confirm a successful connection

@@ -30,21 +30,21 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
-    app.post('/users', async(req,res)=>{
-        const newUser = req.body;
-        const result = await userCollection.insertOne(newUser);
-        res.send(result);
+    app.post('/users', async (req, res) => {
+      const newUser = req.body;
+      const result = await userCollection.insertOne(newUser);
+      res.send(result);
     })
 
     // watchList related api
 
-    app.post('/watchList', async(req,res) =>{
+    app.post('/watchList', async (req, res) => {
       const newWatchList = req.body;
       const result = await watchListCollection.insertOne(newWatchList);
       res.send(result);
     })
 
-    app.get('/watchList', async(req,res) => {
+    app.get('/watchList', async (req, res) => {
       const cursor = watchListCollection.find();
       const result = await cursor.toArray();
       res.send(result);
@@ -52,10 +52,10 @@ async function run() {
 
     // review related api
 
-    app.post('/reviews', async(req,res)=>{
-        const newReview = req.body;
-        const result = await reviewCollection.insertOne(newReview);
-        res.send(result);
+    app.post('/reviews', async (req, res) => {
+      const newReview = req.body;
+      const result = await reviewCollection.insertOne(newReview);
+      res.send(result);
     })
 
     app.get('/reviews', async (req, res) => {
@@ -70,18 +70,18 @@ async function run() {
       const result = await reviewCollection.findOne(query);
       res.send(result);
     })
-    
-    
-    app.get('/reviews/:email', async(req,res) =>{
-      const email = req.params.email;
-      const query = { email:email };
-      const result = await reviewCollection.find(query).toArray();
+
+
+    app.get('/reviews', async (req, res) => {
+      const { email } = req.query;
+      const allReview =await reviewCollection.find().toArray()
+      const result = allReview.filter((e)=>e.email === email);
       res.send(result);
     })
 
 
 
-   
+
 
 
     // Send a ping to confirm a successful connection
@@ -98,9 +98,9 @@ run().catch(console.dir);
 
 
 
-app.get('/', (req,res)=>{
-    res.send('gamer server is ready')
+app.get('/', (req, res) => {
+  res.send('gamer server is ready')
 })
-app.listen(port,()=>{
-    console.log(`gaming is getting is the port ${port}`)
+app.listen(port, () => {
+  console.log(`gaming is getting is the port ${port}`)
 })

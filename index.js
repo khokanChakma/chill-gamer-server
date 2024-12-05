@@ -49,6 +49,21 @@ async function run() {
       res.send(result);
     })
 
+    app.get('/reviews/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await reviewCollection.findOne(query);
+      res.send(result);
+    })
+    
+    // app.get('/reviews/:email', async(req,res) =>{
+    //   const email = req.params.email;
+    //   const query = { email: email };
+    //   const result = await reviewCollection.find(query);
+    //   console.log('show result',result);
+    //   res.send(result)
+    // })
+
 
 
    

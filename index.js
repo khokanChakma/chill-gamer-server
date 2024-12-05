@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express()
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 const port = process.env.PORT || 5000;
 const cors = require('cors');
@@ -25,6 +25,7 @@ async function run() {
     // const gymShedule = client.db('gym-shedule').collection('shedule');
     const userCollection = client.db('gaming-user').collection('users');
     const reviewCollection = client.db('gaming-user').collection('reviews');
+    const watchListCollection = client.db('gaming-user').collection('watchList');
 
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
@@ -35,11 +36,25 @@ async function run() {
         res.send(result);
     })
 
+    // watchList related api
+
+    app.post('/watchList', async(req,res) =>{
+      const newWatchList = req.body;
+      const result = await watchListCollection.insertOne(newWatchList);
+      res.send(result);
+    })
+
+    app.get('/watchList', async(req,res) => {
+      const cursor = watchListCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    })
+
     // review related api
 
     app.post('/reviews', async(req,res)=>{
-        const newrevidw = req.body;
-        const result = await reviewCollection.insertOne(newrevidw);
+        const newReview = req.body;
+        const result = await reviewCollection.insertOne(newReview);
         res.send(result);
     })
 
@@ -49,20 +64,20 @@ async function run() {
       res.send(result);
     })
 
-    app.get('/reviews/:id', async (req, res) => {
+    app.get('/review/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await reviewCollection.findOne(query);
       res.send(result);
     })
     
-    // app.get('/reviews/:email', async(req,res) =>{
-    //   const email = req.params.email;
-    //   const query = { email: email };
-    //   const result = await reviewCollection.find(query);
-    //   console.log('show result',result);
-    //   res.send(result)
-    // })
+    
+    app.get('/reviews/:email', async(req,res) =>{
+      const email = req.params.email;
+      const query = { email:email };
+      const result = await reviewCollection.find(query).toArray();
+      res.send(result);
+    })
 
 
 

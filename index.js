@@ -35,6 +35,11 @@ async function run() {
       const result = await userCollection.insertOne(newUser);
       res.send(result);
     })
+    app.get('/users', async (req, res) => {
+      const cursor = userCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    })
 
     // watchList related api
 
@@ -71,13 +76,44 @@ async function run() {
       res.send(result);
     })
 
-
     app.get('/reviews', async (req, res) => {
       const { email } = req.query;
+      console.log(email)
       const allReview =await reviewCollection.find().toArray()
       const result = allReview.filter((e)=>e.email === email);
       res.send(result);
     })
+
+    app.patch('/reviews/:id', async(req,res)=>{
+      const id = req.params.id;
+      const data = req.body;
+      const query = {_id: new ObjectId(id)};
+      const update = {
+        $set: {
+          coverImage: data?.coverImage,
+          title: data?.title,
+          review: data?.review,
+          rating: data?.rating,
+          year: data?.year,
+          genres: data?.genres,
+          email: data?.email,
+          name: data?.name
+          
+        }
+      }
+      const result = await reviewCollection.updateOne(query,update);
+      res.send(result);
+
+    })
+
+    app.delete('/reviews/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await reviewCollection.deleteOne(query);
+      res.send(result);
+    })
+
+    
 
 
 

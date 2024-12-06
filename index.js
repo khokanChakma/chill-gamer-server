@@ -76,13 +76,7 @@ async function run() {
       res.send(result);
     })
 
-    app.get('/reviews', async (req, res) => {
-      const { email } = req.query;
-      console.log(email)
-      const allReview =await reviewCollection.find().toArray()
-      const result = allReview.filter((e)=>e.email === email);
-      res.send(result);
-    })
+    
 
     app.patch('/reviews/:id', async(req,res)=>{
       const id = req.params.id;

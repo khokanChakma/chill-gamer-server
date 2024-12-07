@@ -76,7 +76,11 @@ async function run() {
       res.send(result);
     })
 
-    
+    app.get('/reviewData', async(req,res) =>{
+      const reviews = reviewCollection.find().sort({rating:"-1"}).limit(6)
+      const result = await reviews.toArray()
+      res.send(result)
+    })
 
     app.patch('/reviews/:id', async(req,res)=>{
       const id = req.params.id;

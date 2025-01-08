@@ -1,7 +1,7 @@
+require('dotenv').config()
 const express = require('express');
 const app = express()
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-require('dotenv').config()
 const port = process.env.PORT || 5000;
 const cors = require('cors');
 
@@ -28,7 +28,7 @@ async function run() {
     const watchListCollection = client.db('gaming-user').collection('watchList');
 
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     app.post('/users', async (req, res) => {
       const newUser = req.body;
@@ -111,15 +111,8 @@ async function run() {
       res.send(result);
     })
 
-    
-
-
-
-
-
-
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
